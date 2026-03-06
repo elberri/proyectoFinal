@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PF Windbnd Vanilla</title>
+    <script type="module" crossorigin src="/proyectoFinal/assets/index-B6sLmcLY.js"></script>
+    <link rel="stylesheet" crossorigin href="/proyectoFinal/assets/index-smvDnMpD.css">
+  </head>
+  <body>
+
+    <!--HEADER — Logo y barra de búsqueda-->
+    <header class="px-6 py-6">
+      <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-6">
+
+        <!-- Logo -->
+        <a href="/">
+          <img src="/proyectoFinal/assets/logo-f7862584-B-EGtLWw.svg" alt="logo de Windbnd"/>
+        </a>
+
+        <!-- Barra de búsqueda -->
+        <div class="relative flex items-stretch h-12 w-fit mx-auto md:mx-0 md:ml-auto border border-gray-100 rounded-xl shadow-md px-2">
+          <input
+            class="text-left w-24 px-2 text-sm focus:outline-none bg-transparent"
+            type="text"
+            id="location"
+            placeholder="Add location"
+          />
+          <span class="self-stretch w-px bg-gray-100 mx-1"></span>
+          <input
+            class="text-left w-24 px-2 text-sm focus:outline-none bg-transparent"
+            type="text"
+            id="guests"
+            placeholder="Add guest"
+          />
+          <span class="self-stretch w-px bg-gray-100 mx-1"></span>
+          <button id="searchButton" class="flex-shrink-0 px-3 bg-transparent">
+            <img class="w-4 h-4" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAADRUlEQVR4nO1ZO2tUQRQeGx/4ABGJtipqayNYaHwQWAgb5nzDrRITUQgJ5D8oWiTa2ycBQSyTJY9WC9+lJjY2dsZUirszVxw5N6vmzt1sNrkzuxvdD6ZZ2G/mm5kz55zvCtFBB+0HS3RcA7cM0bQB3mrgiyYyyQBWDPDGAFNaqZs2io6JdkOs1GUNlDTRDwPYRoYGYg3MGuBSq9cvylF0ShMtNLr4OqLmylKebIkITTSoib7lFfFHDNFXrdRAc0UAd+ss6r0mGo+VulaJojN2YGA/jwpwln/TwIQhWqoj6E5zRBDd2+B6vIyBK43yGCkvaOBZS8RoosEak2oDDFshdm2Vj/9jpBypcri8/SEDOxUT/LwapS7m5eaXSxOtujFTBk4I33Bfp2QXPYj4DSNlN+cbZ6NKwneeqHGXh71OsnYyo5l5lL/N4leq5JzGi+3ExGZgTg28SgkhmvFZdsQpcim7RSDwy+dWALZY7MpNnNRO6R16JwLDEC07Ym74IJ12rtW4CAxNdN/ZvMncpFzFrifl7CwCIybqcTbvdW7SJFesI61IeVoEBpc2jpDPuUndrGuj6IAIDJ7DiZGKfyF9fQdFYNhC4ZCb5cW/cLUM0cfcpNX2tLXBDjzPTco9tkM6IQJDEz1w5nwYIiEuicAwwIfUdQZUblJ2O9wShYtIEQh8dd0q20p5xAt51e1IdYOhikY3Jg0w5W0Cbnwy5bWUI94m+DvPWKZTVOqc10nYsnGO3Pj0pLjqdRsrQ/RI+Ab7TpyYHDGrPkr6xOBzW11gxUbRUREC7DvVMAl4F0e3bT4AY5mTWON9aqNotwgFtmpqtL1JhRoTXd3i6+QGtmsxzdmhob1NF1O918vcT3B2ZlOOC0AeiUFH1FNNdqk8UXcQzYQ+mX43ZkINDczaQmFPMDHsO7nGxDYW+dMATzTRYkvFMNiy4SuQMSnqLYyobIgeGynPMwfHggbmNxFTCi4mWUyx2MVGAffYHPz8hHKJoYm+G+ATWz1cAGrguu3tPZz5fzuJyQsObLckMlkx80Ffs6aKIVroiGk27H8oZtFG0T7R7rCNvGbN/v4Y6GRui50EW1vMzhKxgZidKSIVM6E+lnbQgaiLX9j9sfdSHdGeAAAAAElFTkSuQmCC" alt="buscar"/>
+          </button>
+        </div>
+
+      </div>
+    </header>
+    <main class="px-6 py-4">
+
+      <!-- Título y contador de resultados -->
+      <section class="flex justify-between items-center mt-8 mb-6 font-bold">
+        <h1 class="text-2xl">Stays in Finland</h1>
+        <span id="counter" class="text-sm text-gray-500"></span>
+      </section>
+
+      <!-- Grid de cards — se renderiza dinámicamente desde JS -->
+      <section
+        id="stays-container"
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+      ></section>
+    </main>
+
+    <!--MODAL — Búsqueda con location y guests -->
+    <div id="searchModal" class="hidden fixed inset-0 z-50">
+
+      <!-- Overlay oscuro — al clickearlo se cierra el modal -->
+      <div id="modalOverlay" class="absolute inset-0 bg-black/40"></div>
+
+      <!-- Panel del modal -->
+      <div class="absolute top-0 left-0 right-0 bg-white rounded-b-3xl shadow-xl p-6 z-10">
+
+        <!-- Botón cerrar -->
+        <div class="flex justify-end mb-6">
+          <button id="closeModal" class="text-gray-500 font-bold text-lg">✕</button>
+        </div>
+
+        <!-- Campos de Location y Guests -->
+        <div class="border border-gray-200 rounded-2xl overflow-hidden mb-6">
+
+          <!-- Input de location con sugerencias -->
+          <div class="p-4 border-b border-gray-200 relative">
+            <p class="text-xs font-semibold uppercase tracking-widest text-gray-700 mb-1">Location</p>
+            <input
+              id="modalLocation"
+              type="text"
+              placeholder="Add location"
+              autocomplete="off"
+              class="w-full text-sm focus:outline-none"/>
+            <!-- Dropdown de sugerencias de ciudades -->
+            <div id="suggestions" class="absolute left-0 right-0 top-full bg-white shadow-lg rounded-lg z-20"></div>
+          </div>
+
+          <!-- Resumen de guests seleccionados -->
+          <div class="p-4">
+            <p class="text-xs font-semibold uppercase tracking-widest text-gray-700 mb-1">Guests</p>
+            <p id="guestsSummary" class="text-sm text-gray-400">Add guests</p>
+          </div>
+        </div>
+
+        <!-- Contador de adultos -->
+        <div class="flex justify-between items-center mb-4">
+          <div>
+            <p class="font-semibold">Adults</p>
+            <p class="text-sm text-gray-400">Ages 13 or above</p>
+          </div>
+          <div class="flex items-center gap-4">
+            <button id="adultsMin" class="w-7 h-7 border border-gray-300 rounded text-gray-500">−</button>
+            <span id="adultsCount">0</span>
+            <button id="adultsPlus" class="w-7 h-7 border border-gray-300 rounded text-gray-500">+</button>
+          </div>
+        </div>
+
+        <!-- Contador de niños -->
+        <div class="flex justify-between items-center mb-8">
+          <div>
+            <p class="font-semibold">Children</p>
+            <p class="text-sm text-gray-400">Ages 13 or above</p>
+          </div>
+          <div class="flex items-center gap-4">
+            <button id="childrenMin" class="w-7 h-7 border border-gray-300 rounded text-gray-500">−</button>
+            <span id="childrenCount">0</span>
+            <button id="childrenPlus" class="w-7 h-7 border border-gray-300 rounded text-gray-500">+</button>
+          </div>
+        </div>
+
+        <!-- Botón de búsqueda -->
+        <div class="flex justify-center">
+          <button id="modalSearch" class="flex items-center gap-2 bg-red-400 text-white px-8 py-3 rounded-full font-semibold">
+            <img class="w-4 h-4 invert" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAADRUlEQVR4nO1ZO2tUQRQeGx/4ABGJtipqayNYaHwQWAgb5nzDrRITUQgJ5D8oWiTa2ycBQSyTJY9WC9+lJjY2dsZUirszVxw5N6vmzt1sNrkzuxvdD6ZZ2G/mm5kz55zvCtFBB+0HS3RcA7cM0bQB3mrgiyYyyQBWDPDGAFNaqZs2io6JdkOs1GUNlDTRDwPYRoYGYg3MGuBSq9cvylF0ShMtNLr4OqLmylKebIkITTSoib7lFfFHDNFXrdRAc0UAd+ss6r0mGo+VulaJojN2YGA/jwpwln/TwIQhWqoj6E5zRBDd2+B6vIyBK43yGCkvaOBZS8RoosEak2oDDFshdm2Vj/9jpBypcri8/SEDOxUT/LwapS7m5eaXSxOtujFTBk4I33Bfp2QXPYj4DSNlN+cbZ6NKwneeqHGXh71OsnYyo5l5lL/N4leq5JzGi+3ExGZgTg28SgkhmvFZdsQpcim7RSDwy+dWALZY7MpNnNRO6R16JwLDEC07Ym74IJ12rtW4CAxNdN/ZvMncpFzFrifl7CwCIybqcTbvdW7SJFesI61IeVoEBpc2jpDPuUndrGuj6IAIDJ7DiZGKfyF9fQdFYNhC4ZCb5cW/cLUM0cfcpNX2tLXBDjzPTco9tkM6IQJDEz1w5nwYIiEuicAwwIfUdQZUblJ2O9wShYtIEQh8dd0q20p5xAt51e1IdYOhikY3Jg0w5W0Cbnwy5bWUI94m+DvPWKZTVOqc10nYsnGO3Pj0pLjqdRsrQ/RI+Ab7TpyYHDGrPkr6xOBzW11gxUbRUREC7DvVMAl4F0e3bT4AY5mTWON9aqNotwgFtmpqtL1JhRoTXd3i6+QGtmsxzdmhob1NF1O918vcT3B2ZlOOC0AeiUFH1FNNdqk8UXcQzYQ+mX43ZkINDczaQmFPMDHsO7nGxDYW+dMATzTRYkvFMNiy4SuQMSnqLYyobIgeGynPMwfHggbmNxFTCi4mWUyx2MVGAffYHPz8hHKJoYm+G+ATWz1cAGrguu3tPZz5fzuJyQsObLckMlkx80Ffs6aKIVroiGk27H8oZtFG0T7R7rCNvGbN/v4Y6GRui50EW1vMzhKxgZidKSIVM6E+lnbQgaiLX9j9sfdSHdGeAAAAAElFTkSuQmCC" alt="buscar"/>
+            search
+          </button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
