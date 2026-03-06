@@ -88,10 +88,13 @@ modalLocation.addEventListener("input", () => {
   }
   const cities = [...new Set(stays.map((stay) => stay.city))];
   const matches = cities.filter((c) =>
-    c.toLowerCase().includes(city.toLowerCase())
+    c.toLowerCase().includes(city.toLowerCase()),
   );
   const html = matches
-    .map((c) => `<p class="px-4 py-2 hover:bg-gray-100 cursor-pointer suggestion-item">${c}, Finland</p>`)
+    .map(
+      (c) =>
+        `<p class="px-4 py-2 hover:bg-gray-100 cursor-pointer suggestion-item">${c}, Finland</p>`,
+    )
     .join("");
   suggestions.innerHTML = html;
   suggestions.hidden = false;
